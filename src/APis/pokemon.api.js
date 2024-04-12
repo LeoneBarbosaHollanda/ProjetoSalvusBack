@@ -8,18 +8,21 @@ class PokemonController {
 
     create(req, res) {
         const pokemonData = req.body;
+        console.log(req.body)
         this.pokemonService.create(pokemonData)
             .then(pokemon => res.json(pokemon))
             .catch(error => res.status(500).json({ error: 'Error creating Pokemon' }));
     }
 
     findAll(req, res) {
+        console.log(req.body)
         this.pokemonService.findAll()
             .then(pokemons => res.json(pokemons))
             .catch(error => res.status(500).json({ error: 'Error fetching Pokemon list' }));
     }
 
     findOne(req, res) {
+        console.log(req.body)
         const id = req.params.id;
         this.pokemonService.findOne(id)
             .then(pokemon => res.json(pokemon))
@@ -29,6 +32,7 @@ class PokemonController {
     update(req, res) {
         const id = req.params.id;
         const pokemonData = req.body;
+        console.log(req.body)
         this.pokemonService.update(id, pokemonData)
             .then(updatedPokemon => res.json(updatedPokemon))
             .catch(error => res.status(500).json({ error: 'Error updating Pokemon' }));
@@ -36,10 +40,24 @@ class PokemonController {
 
     remove(req, res) {
         const id = req.params.id;
+        console.log(req.body)
         this.pokemonService.remove(id)
             .then(() => res.status(204).send())
             .catch(error => res.status(500).json({ error: 'Error deleting Pokemon' }));
     }
+
+tradePokemons(req, res) {
+  const { nameTrainer1, namePokemon1, namePokemon2, nameTrainer2 } = req.body;
+
+  this.pokemonService
+    .tradePokemon(nameTrainer1, namePokemon1, namePokemon2, nameTrainer2)
+    .then(() => res.status(200).json({ success: true }))
+    .catch(error => {
+      console.error("Erro na troca de pokémon:", error);
+      res.status(500).json({ success: false, error: "Ocorreu um erro durante a troca de pokémon." });
+    });
+    }
+    
 }
 
 module.exports = PokemonController;
