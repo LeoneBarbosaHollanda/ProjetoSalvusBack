@@ -53,9 +53,15 @@ tradePokemons(req, res) {
     .tradePokemon(nameTrainer1, namePokemon1, namePokemon2, nameTrainer2)
     .then(() => res.status(200).json({ success: true }))
     .catch(error => {
-      console.error("Erro na troca de pokémon:", error);
-      res.status(500).json({ success: false, error: "Ocorreu um erro durante a troca de pokémon." });
-    });
+        let errorMessage;
+        if (error instanceof Error && error.message) {
+          errorMessage = error.message;
+        } else {
+          errorMessage = "Ocorreu um erro durante a troca de pokémon.";
+        }
+        console.error("Erro na troca de pokémon:", errorMessage);
+        res.status(500).json({ success: false, error: errorMessage });
+      });
     }
     
 }
