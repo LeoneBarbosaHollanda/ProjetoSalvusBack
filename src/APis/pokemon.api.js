@@ -11,7 +11,12 @@ class PokemonController {
         console.log(req.body)
         this.pokemonService.create(pokemonData)
             .then(pokemon => res.json(pokemon))
-            .catch(error => res.status(500).json({ error: 'Error creating Pokemon' }));
+            .catch(error => {
+                let errorMessage;
+                errorMessage = error.message;
+                res.status(500).json({error: errorMessage });
+                });
+        
     }
 
     findAll(req, res) {

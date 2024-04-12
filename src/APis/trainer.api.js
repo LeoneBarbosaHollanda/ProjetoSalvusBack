@@ -10,7 +10,11 @@ class TrainerController {
         const trainerData = req.body;
         this.trainerService.create(trainerData)
             .then(trainer => res.json(trainer))
-            .catch(error => res.status(500).json({ error: 'Error creating Ptrainer' }));
+            .catch(error => {
+                let errorMessage;
+                errorMessage = error.message;
+                res.status(500).json({error: errorMessage });
+                });
     }
 
     findAll(req, res) {

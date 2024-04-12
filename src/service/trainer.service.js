@@ -8,6 +8,11 @@ class TrainerService {
     }
 
     async create(trainerData) {
+        const existingTrainer = await this.findNameTrainer(trainerData.nome);
+        if (existingTrainer) {
+            throw new Error(`Já existe um Pokémon com o nome ${trainerData.nome}`);
+        }
+        trainerData.nome = trainerData.nome.charAt(0).toUpperCase() + trainerData.nome.slice(1);
         return this.db("trainer").insert(trainerData);
     }
 

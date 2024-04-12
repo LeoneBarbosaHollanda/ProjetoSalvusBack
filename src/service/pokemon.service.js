@@ -11,6 +11,12 @@ class PokemonService {
     }
 
     async create(pokemonData) {
+        const existingPokemon = await this.findNamePokemon(pokemonData.nome);
+        if (existingPokemon) {
+            throw new Error(`Já existe um Pokémon com o nome ${pokemonData.nome}`);
+        }
+        pokemonData.nome = pokemonData.nome.charAt(0).toUpperCase() + pokemonData.nome.slice(1);
+
         return this.db("pokemon").insert(pokemonData);
     }
 
@@ -26,6 +32,7 @@ class PokemonService {
     }
 
     async update(id, pokemonData) {
+        pokemonData.nome = pokemonData.nome.charAt(0).toUpperCase() + pokemonData.nome.slice(1);
         await this.db("pokemon").where({ id }).update(pokemonData);
         return this.db("pokemon").where({ id }).first();
     }
