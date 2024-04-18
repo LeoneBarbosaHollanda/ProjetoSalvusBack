@@ -13,11 +13,12 @@ class TrainerController {
             .catch(error => {
                 let errorMessage;
                 errorMessage = error.message;
-                res.status(500).json({error: errorMessage });
-                });
+                res.status(500).json({ error: errorMessage });
+            });
     }
 
     findAll(req, res) {
+        console.log("passou aqui")
         this.trainerService.findAll()
             .then(trainers => res.json(trainers))
             .catch(error => res.status(500).json({ error: 'Error fetching Ptrainer list' }));
@@ -44,7 +45,7 @@ class TrainerController {
             .then(() => res.status(204).send())
             .catch(error => res.status(500).json({ error: 'Error deleting Ptrainer' }));
     }
-    
+
 }
 
 module.exports = TrainerController;

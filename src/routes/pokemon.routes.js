@@ -11,5 +11,7 @@ router.get('/pokemons/:id', (req, res) => pokemonController.findOne(req, res));
 router.put('/pokemons/:id', (req, res) => pokemonController.update(req, res));
 router.delete('/pokemons/:id', (req, res) => pokemonController.remove(req, res));
 router.post('/trade', (req, res) => pokemonController.tradePokemons(req, res));
+router.get('/pokemons/trainer/:id', (req, res) => pokemonController.findTrainerName(req, res));
+
 
 module.exports = router;
