@@ -1,39 +1,45 @@
 //auth.service.js
 const jwt = require("jsonwebtoken");
-const sha1 = require("../middleware/sha1"); // Importe a função de hash, se necessário
-
+const knex = require("knex");
+const knexConfig = require("../database/knexfile");
+const sha1 = require("../middleware/sha1"); 
+const TrainerService = require("./trainer.service")
 
 const jwtKey = "chave_secreta_do_jwt";
 const jwtExpiry = "1h";
 class AuthenticationService {
-    constructor(knex) {
-        this.knex = knex;
+    constructor() {
+        this.db = knex(knexConfig.development);
+        this.trainerService = new TrainerService();
+
     }
 
-    async createToken(userId) {
-        const token = jwt.sign({ userId }, jwtKey, { expiresIn: jwtExpiry });
+    async createToken(trainerId) {
+        const token = jwt.sign({ trainerId }, jwtKey, { expiresIn: jwtExpiry });
+        await this.db("tokens").insert(token)
         return token;
     }
 
     async verifyToken(token) {
         try {
             const payload = jwt.verify(token, jwtKey);
-            return payload.userId;
+            return payload.trainerId;
         } catch (error) {
             throw new Error("Token inválido");
         }
     }
 
-    async login(email, password) {
-        const user = await this.knex("users").where({ email }).first();
-        if (!user) {
+    async login(nome, senha) {
+        const trainer = this.trainerService.findNameTrainer(nome)
+        console.log(trainer.nome,"passou aqui")
+        if (!trainer) {
             throw new Error("Usuário não encontrado");
         }
-        const hashedPassword = sha1(password);
-        if (user.password !== hashedPassword) {
+        const hashedSenha = sha1(senha);
+        if (trainer.senha !== hashedSenha) {
             throw new Error("Credenciais inválidas");
         }
-        const token = await this.createToken(user.id);
+        const token = await this.createToken(trainer.id);
         return token;
     }
 

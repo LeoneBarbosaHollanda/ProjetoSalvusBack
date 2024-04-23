@@ -1,11 +1,10 @@
 // auth.js
 const { EntitySchema } = require('typeorm');
-const Pokemon = require('./Pokemon');
 
 module.exports = new EntitySchema({
     name: 'tokens',
     columns: {
-        id: {
+        expiresAt: {
             primary: true,
             type: 'int',
             generated: true

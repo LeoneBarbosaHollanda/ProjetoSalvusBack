@@ -1,7 +1,7 @@
 // ptrainer.service.js
 const knex = require("knex");
 const knexConfig = require("../database/knexfile");
-const SHA1 = require("../middlewere/sha1")
+const SHA1 = require("../middleware/sha1")
 
 class TrainerService {
     constructor() {
@@ -38,6 +38,8 @@ class TrainerService {
         return this.db("trainer").where({ id }).del();
     }
     async findNameTrainer(nome) {
+        const data = this.db("trainer").where({ nome }).first()
+        console.log(data.nome)
         return this.db("trainer").where({ nome }).first();
     }
 }
