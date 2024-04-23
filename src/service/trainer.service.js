@@ -1,6 +1,7 @@
 // ptrainer.service.js
 const knex = require("knex");
 const knexConfig = require("../database/knexfile");
+const SHA1 = require("../middlewere/sha1")
 
 class TrainerService {
     constructor() {
@@ -8,6 +9,8 @@ class TrainerService {
     }
 
     async create(trainerData) {
+        trainerData.senha = SHA1(trainerData.senha);
+
         const existingTrainer = await this.findNameTrainer(trainerData.nome);
         if (existingTrainer) {
             throw new Error(`Já existe um treinador com o nome ${trainerData.nome}`);

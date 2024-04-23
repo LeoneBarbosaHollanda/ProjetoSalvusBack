@@ -16,6 +16,9 @@ module.exports = new EntitySchema({
         sexo: {
             type: 'varchar'
         },
+        senha: {
+            type: 'varchar'
+        },
         dinheiro: {
             type: 'int'
         }
