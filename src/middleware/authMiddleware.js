@@ -1,17 +1,18 @@
 //authMiddleware
-const Auth = require("./auth");
+const Auth = require("../service/auth.service");
+const knexfile = require("../database/knexfile");
 
-function authMiddleware(knex) {
-    const userAuth = new Auth(knex);
+function authMiddleware() {
+    const userAuth = new Auth(knexfile);
 
     return async function (req, res, next) {
         const bearerToken = req.headers.authorization ? req.headers.authorization.replace("Bearer ", "") : "";
-
+        console.log("bearerToken->", bearerToken)
         try {
             const auth = await userAuth.loginWithToken(bearerToken);
 
             if (auth.auth) {
-                req.userId = auth.userParams.id; // Adicione o ID do usuário extraído do token ao objeto de requisição
+                req.userId = auth.userParams.id;
                 next();
             } else {
                 res.status(401).json({

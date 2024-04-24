@@ -10,7 +10,7 @@ module.exports = new EntitySchema({
             generated: true
         },
         expiresAt: {
-            type: 'int',
+            type: 'bigint',
             nullable: true
 
         },

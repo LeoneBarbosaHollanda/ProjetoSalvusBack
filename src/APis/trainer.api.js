@@ -1,4 +1,3 @@
-//poekemon api 
 const TrainerService = require('../service/trainer.service');
 
 class TrainerController {
@@ -31,19 +30,25 @@ class TrainerController {
             .catch(error => res.status(404).json({ error: 'Trainer not found' }));
     }
 
-    update(req, res) {
+    update(req, res, next) {
         const id = req.params.id;
         const trainerData = req.body;
         this.trainerService.update(id, trainerData)
             .then(updatedTrainer => res.json(updatedTrainer))
-            .catch(error => res.status(500).json({ error: 'Error updating Ptrainer' }));
+            .catch(error => {
+                res.status(500).json({ error: 'Error updating Ptrainer' });
+                next(error);
+            });
     }
 
-    remove(req, res) {
+    remove(req, res, next) {
         const id = req.params.id;
         this.trainerService.remove(id)
             .then(() => res.status(204).send())
-            .catch(error => res.status(500).json({ error: 'Error deleting Ptrainer' }));
+            .catch(error => {
+                res.status(500).json({ error: 'Error deleting Ptrainer' });
+                next(error);
+            });
     }
 
 }

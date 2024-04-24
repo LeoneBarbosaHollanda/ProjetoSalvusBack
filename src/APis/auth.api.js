@@ -5,7 +5,7 @@ const Auth = require("../service/auth.service");
 const knexfile = require("../database/knexfile");
 
 const User = new Auth(knexfile);
-class AuthController{
+class AuthController {
 
 
     loginUser(req, res) {
@@ -24,6 +24,28 @@ class AuthController{
             res.status(500).json({ statusCode: 500, message: error.message }).end();
         }
     }
+    loginWithToken(token) {
+        var payload;
+        console.log("passou pelo login com token")
+        try {
+            payload = jwt.verify(token, jwtKey);
+        } catch (e) {
+            if (e instanceof jwt.JsonWebTokenError) {
+                return {
+                    auth: false,
+                    statusCode: 401,
+                    error: "Token em formato inválido.",
+                };
+            }
+            return { auth: false, statusCode: 400, error: "Token inválido." };
+        }
+
+        const loginParams = this.knex("trainer")
+            .where({ id: payload.id })
+            .select("id", "nome");
+
+        return { auth: true, userParams: loginParams[0] };
+    };
 
     getUserDetails(req, res) {
         const bearerToken = req.headers.authorization ? req.headers.authorization : "";

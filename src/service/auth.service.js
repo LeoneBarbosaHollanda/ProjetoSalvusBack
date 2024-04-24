@@ -6,7 +6,7 @@ const sha1 = require("../middleware/sha1");
 const TrainerService = require("./trainer.service")
 
 const jwtKey = "chave_secreta_do_jwt";
-const jwtExpiry = 1;
+const jwtExpiry = 60;
 class AuthenticationService {
     constructor() {
         this.db = knex(knexConfig.development);
@@ -18,9 +18,12 @@ class AuthenticationService {
         console.log("Ta no create token")
         console.log(trainerId)
         const token = jwt.sign({ trainerId }, jwtKey, { expiresIn: jwtExpiry });
-        await this.db("tokens").insert({ treinadorId: trainerId, jwtToken: token, expiresAt: jwtExpiry })
+        const expiresAt = Date.now() + jwtExpiry * 6000;
+        await this.db("tokens").insert({ treinadorId: trainerId, jwtToken: token, expiresAt: expiresAt })
+
         return token;
     }
+
 
     async verifyToken(token) {
         try {
@@ -45,6 +48,33 @@ class AuthenticationService {
         console.log(token)
         return token;
     }
+    async loginWithToken(token) {
+        console.log("token->", token)
+        var payload;
+        console.log("passou pelo login com token")
+        try {
+            console.log(jwtKey)
+            payload = jwt.verify(token, jwtKey);
+            console.log("passou pelo payload=>", payload)
+        } catch (e) {
+            if (e instanceof jwt.JsonWebTokenError) {
+                return {
+                    auth: false,
+                    statusCode: 401,
+                    error: "Token em formato inválido.",
+                };
+            }
+            console.log("passou do 401")
+            return { auth: false, statusCode: 400, error: "Token inválido." };
+        }
+        console.log("passou do 400 e 401")
+        console.log(payload.id)
+        const loginParams = await this.db("trainer")
+            .where({ id: payload.trainerId })
+            .select("id", "nome");
+
+        return { auth: true, userParams: loginParams[0] };
+    };
 
 
 }
