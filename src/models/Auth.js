@@ -2,15 +2,21 @@
 const { EntitySchema } = require('typeorm');
 
 module.exports = new EntitySchema({
-    name: 'tokens',
+    name: 'Tokens',
     columns: {
-        expiresAt: {
+        id: {
             primary: true,
             type: 'int',
             generated: true
         },
-        token: {
-            type: 'varchar'
+        expiresAt: {
+            type: 'int',
+            nullable: true
+
+        },
+        jwtToken: {
+            type: 'varchar',
+            nullable: true
         },
         treinadorId: {
             type: 'int',
@@ -25,5 +31,4 @@ module.exports = new EntitySchema({
             nullable: true
         }
     }
-}
-);
+});

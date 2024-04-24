@@ -10,8 +10,8 @@ class TrainerService {
 
     async create(trainerData) {
         trainerData.senha = SHA1(trainerData.senha);
-
         const existingTrainer = await this.findNameTrainer(trainerData.nome);
+        console.log(existingTrainer)
         if (existingTrainer) {
             throw new Error(`Já existe um treinador com o nome ${trainerData.nome}`);
         }

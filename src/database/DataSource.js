@@ -1,6 +1,7 @@
 const { createConnection } = require("typeorm");
 const Pokemon = require('../models/Pokemon');
 const Trainer = require('../models/Trainer');
+const Tokens = require('../models/Auth')
 
 class DataSource {
     static async initialize() {
@@ -13,7 +14,7 @@ class DataSource {
                 password: "root",
                 database: "test",
                 synchronize: true,
-                entities: [Pokemon, Trainer]
+                entities: [Pokemon, Trainer, Tokens]
             });
             console.log("Conexão com o banco de dados estabelecida com sucesso.");
         } catch (error) {

@@ -28,6 +28,11 @@ module.exports = new EntitySchema({
             type: 'one-to-many',
             target: 'Pokemon',
             inverseSide: 'treinador'
+        },
+        auth: {
+            type: 'one-to-many',
+            target: "Tokens",
+            inverseSide: "treinador"
         }
     }
 });
