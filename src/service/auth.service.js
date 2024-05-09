@@ -46,7 +46,7 @@ class AuthenticationService {
         console.log("passou da senha")
         const token = await this.createToken(trainer.id);
         console.log(token)
-        return token;
+        return { token, trainer };
     }
     async loginWithToken(token) {
         console.log("token->", token)

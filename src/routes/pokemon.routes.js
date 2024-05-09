@@ -12,7 +12,7 @@ router.put('/pokemons/:id', authMiddleware(), (req, res, next) => pokemonControl
 router.delete('/pokemons/:id', authMiddleware(), (req, res, next) => pokemonController.remove(req, res, next));
 router.post('/trade', authMiddleware(), (req, res, next) => pokemonController.tradePokemons(req, res, next));
 
-router.get('/pokemons', (req, res) => pokemonController.findAll(req, res));
+router.get('/pokemons', authMiddleware(), (req, res) => pokemonController.findAll(req, res));
 router.get('/pokemons/:id', (req, res) => pokemonController.findOne(req, res));
 router.get('/pokemons/trainer/:id', (req, res) => pokemonController.findTrainerName(req, res));
 
